@@ -1,232 +1,405 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>For You 💖</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Bunga Mekar — Happy Valentine 🌹</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+  :root{
+    --bg1:#fff0f3;
+    --bg2:#ffd6e0;
+    --accent1:#ff5972; /* petal bright */
+    --accent2:#c92b4b; /* petal deep */
+    --stem:#2d7a4a;
+    --leaf:#4fb06b;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: radial-gradient(1000px 600px at 10% 10%, rgba(255,255,255,0.7), rgba(255,230,240,0.65)), linear-gradient(180deg,var(--bg1),var(--bg2));
+    -webkit-font-smoothing:antialiased;
+    color:#222;
+    overflow:hidden;
+  }
 
-body {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at top, #ffd6e0, #ff8fab);
-    overflow: hidden;
-    text-align: center;
-}
+  .card {
+    width: 92vw;
+    max-width:760px;
+    background: rgba(255,255,255,0.12);
+    border-radius:20px;
+    padding:28px;
+    box-shadow: 0 10px 40px rgba(200,30,60,0.08);
+    backdrop-filter: blur(6px) saturate(120%);
+    text-align:center;
+  }
 
-/* Container */
-.scene {
-    position: relative;
-}
+  h1{ color:#fff; font-size:1.6rem; margin-bottom:8px; text-shadow:0 6px 18px rgba(0,0,0,0.25)}
+  p{ color: rgba(255,255,255,0.85); margin-top:0; margin-bottom:18px; font-size:0.98rem }
 
-/* Bunga */
-.flower {
-    position: relative;
-    width: 200px;
-    height: 200px;
-}
+  /* container SVG */
+  .flower-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding: 6px 0 2px 0;
+  }
 
-/* Kelopak */
-.petal {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(145deg, #ffccd5, #ff8fab);
-    border-radius: 50%;
-    top: 60px;
-    left: 60px;
-    transform-origin: center;
+  /* SVG sizing */
+  svg.flower-svg{
+    width:320px;
+    height:420px;
+    overflow:visible;
+    filter: drop-shadow(0 20px 40px rgba(200,40,80,0.12));
+  }
+
+  /* initial kuncup state */
+  .petal {
+    transform-origin: 50% 50%;
+    transform-box: fill-box;
+    transition: transform 1.0s cubic-bezier(.2,.9,.25,1), opacity 0.9s ease;
     opacity: 0;
-    transform: scale(0) rotate(0deg);
-    transition: 1.2s ease;
-    filter: blur(0.3px);
-}
+  }
 
-/* Posisi kelopak */
-.p1 { transform: rotate(0deg) translateY(-70px); }
-.p2 { transform: rotate(60deg) translateY(-70px); }
-.p3 { transform: rotate(120deg) translateY(-70px); }
-.p4 { transform: rotate(180deg) translateY(-70px); }
-.p5 { transform: rotate(240deg) translateY(-70px); }
-.p6 { transform: rotate(300deg) translateY(-70px); }
+  /* when bloom, petals scale/rotate to visible */
+  svg.flower-svg.bloom .petal {
+    opacity:1;
+  }
 
-/* Tengah */
-.center {
+  /* we'll animate petals with stagger via JS by setting --d custom property */
+  .petal.open {
+    transform: translate(0,0) scale(1);
+    transition-delay: var(--d,0s);
+  }
+
+  /* center bud */
+  .bud {
+    transform-origin: 50% 50%;
+    transform-box: fill-box;
+    transform: scale(0.6);
+    transition: transform 0.9s cubic-bezier(.2,.9,.25,1);
+    fill: url(#budGrad);
+    filter: blur(0.15px);
+    opacity:0.98;
+  }
+  svg.flower-svg.bloom .bud { transform: scale(1); }
+
+  /* inner swirl (grow later) */
+  .swirl { transform-origin: 50% 50%; transform-box: fill-box; transform: scale(0.6) rotate(-12deg); opacity:0; transition:all 0.9s cubic-bezier(.2,.9,.25,1) var(--sw-Delay,0.6s); }
+  svg.flower-svg.bloom .swirl { transform: scale(1) rotate(0deg); opacity:1; }
+
+  /* stem & leaf subtle sway */
+  .stem, .leaf {
+    transform-origin: 50% 0%;
+    transform-box: fill-box;
+    transition: transform 1.2s ease;
+  }
+  svg.flower-svg.bloom .stem { transform: translateY(0); }
+  svg.flower-svg .stem { transform: translateY(6px); } /* kuncup sedikit turun */
+
+  .leaf { opacity:0; transform: translateY(6px) rotate(0deg) scale(0.9); transition: all 1s ease var(--d,0s); }
+  svg.flower-svg.bloom .leaf { opacity:1; transform: translateY(0) rotate(6deg) scale(1); }
+
+  /* small breathing sway so it feels alive */
+  @keyframes gentleSway {
+    0%{ transform: translateX(0) rotate(-1deg) }
+    50%{ transform: translateX(2px) rotate(2deg) }
+    100%{ transform: translateX(0) rotate(-1deg) }
+  }
+  svg.flower-svg .flower-root { animation: gentleSway 6s ease-in-out infinite; transform-origin:50% 60% }
+
+  /* button */
+  .actions{ margin-top:18px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
+  button.primary{
+    background: linear-gradient(180deg,#fff 0%, #fff 40%);
+    border-radius:28px;
+    padding:10px 20px;
+    border:none;
+    font-weight:600;
+    color: #c92b4b;
+    box-shadow: 0 10px 30px rgba(201,43,75,0.18);
+    cursor:pointer;
+    transition:transform .15s ease;
+  }
+  button.primary:active{ transform:translateY(2px) }
+  button.tertiary{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.9);
+    padding:9px 16px;
+    border-radius:18px;
+    cursor:pointer;
+  }
+
+  /* floating tiny particles (optional) */
+  .particle{
     position: absolute;
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(145deg, #ff4d6d, #c9184a);
-    border-radius: 50%;
-    top: 65px;
-    left: 65px;
-    z-index: 2;
-    transform: scale(0);
-    transition: 1s ease;
-    box-shadow: 0 0 25px rgba(255, 77, 109, 0.6);
-}
-
-/* Batang */
-.stem {
-    position: absolute;
-    width: 6px;
-    height: 120px;
-    background: linear-gradient(to bottom, #40916c, #1b4332);
-    top: 130px;
-    left: 97px;
-    border-radius: 10px;
-}
-
-/* Daun */
-.leaf {
-    position: absolute;
-    width: 35px;
-    height: 18px;
-    background: #74c69d;
-    border-radius: 50%;
-}
-
-.leaf1 {
-    top: 180px;
-    left: 100px;
-    transform: rotate(30deg);
-}
-
-.leaf2 {
-    top: 200px;
-    left: 60px;
-    transform: rotate(-30deg);
-}
-
-/* Mekar */
-.bloom .petal {
-    opacity: 1;
-    transform: scale(1) rotate(360deg);
-}
-
-.bloom .center {
-    transform: scale(1);
-}
-
-/* Teks */
-h1 {
-    margin-top: 20px;
-    color: white;
-    font-size: 2.2em;
-    text-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-p {
-    color: white;
-    opacity: 0.9;
-    margin-top: 8px;
-}
-
-/* Tombol */
-button {
-    margin-top: 25px;
-    padding: 12px 28px;
-    border: none;
-    border-radius: 30px;
-    background: white;
-    color: #c9184a;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transition: 0.3s;
-}
-
-button:hover {
-    transform: scale(1.05);
-}
-
-/* Partikel aesthetic */
-.sparkle {
-    position: absolute;
-    color: rgba(255,255,255,0.8);
-    animation: floatUp linear forwards;
+    font-size: 12px;
     pointer-events: none;
-}
+    opacity: 0.95;
+    filter: drop-shadow(0 4px 10px rgba(255,120,150,0.08));
+  }
 
-@keyframes floatUp {
-    to {
-        transform: translateY(-100vh);
-        opacity: 0;
-    }
-}
+  /* responsive */
+  @media (max-width:420px){
+    svg.flower-svg{ width:250px; height:330px }
+    h1{ font-size:1.2rem }
+  }
 </style>
 </head>
-
 <body>
+  <div class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Selamat Hari Valentine 🌹</h1>
+    <p id="subtitle">Klik tombol untuk melihat kuncup mekar jadi bunga nyata — lembut dan natural.</p>
 
-<div class="scene">
-    <div class="flower" id="flower">
-        <div class="petal p1"></div>
-        <div class="petal p2"></div>
-        <div class="petal p3"></div>
-        <div class="petal p4"></div>
-        <div class="petal p5"></div>
-        <div class="petal p6"></div>
+    <div class="flower-wrap" aria-hidden="false">
+      <!-- SVG flower: petals are individual path elements. We use groups rotated to make layered petals. -->
+      <svg class="flower-svg" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" aria-label="Ilustrasi bunga" role="img">
+        <defs>
+          <!-- petal gradient -->
+          <linearGradient id="petalGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#ffd1dc"/>
+            <stop offset="45%" stop-color="#ff8fab"/>
+            <stop offset="100%" stop-color="#c92b4b"/>
+          </linearGradient>
+          <radialGradient id="budGrad" cx="50%" cy="35%">
+            <stop offset="0%" stop-color="#fff1f3" stop-opacity="0.95"/>
+            <stop offset="60%" stop-color="#ff4d6d" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#b41f3b" stop-opacity="0.98"/>
+          </radialGradient>
 
-        <div class="center"></div>
-        <div class="stem"></div>
-        <div class="leaf leaf1"></div>
-        <div class="leaf leaf2"></div>
+          <filter id="petalShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#b33" flood-opacity="0.08"/>
+          </filter>
+        </defs>
+
+        <!-- stem -->
+        <g class="flower-root">
+          <rect class="stem" x="98" y="150" width="4" height="110" rx="2" fill="url(#stemGrad)" />
+        </g>
+
+        <!-- add a subtle stem gradient via a tiny trick: defs + use fallback fill -->
+        <defs>
+          <linearGradient id="stemGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#3aa96b"/>
+            <stop offset="100%" stop-color="#1f5a37"/>
+          </linearGradient>
+        </defs>
+
+        <!-- leaves -->
+        <path class="leaf" d="M110 210 C140 200,155 220,130 230 C115 236,100 228,110 210Z" fill="#4fb06b" opacity="0.95"/>
+        <path class="leaf" d="M80 230 C55 210,45 230,70 240 C85 247,95 238,80 230Z" fill="#3aa96b" opacity="0.95"/>
+
+        <!-- petals group: we'll place several petal shapes arranged around center.
+             Each petal is a path shaped like a real petal (Bezier curve). -->
+        <g transform="translate(100,90)" class="petals">
+          <!-- We'll create 12 petals, layered: inner smaller ones, outer bigger ones.
+               Each petal has class petal and data-angle for JS staggering. -->
+          <!-- Inner small petals -->
+          <path id="p1" class="petal" d="M0,-6 C 12,-18 28,-18 34,-3 C 38,8 14,24 0,20 C -12,18 -34,6 -30,-6 C -26,-18 -6,-10 0,-6Z"
+                fill="url(#petalGrad)" filter="url(#petalShadow)" style="transform-origin:50% 50%"></path>
+          <path id="p2" class="petal" d="M0,-10 C 10,-26 36,-26 44,-6 C 48,8 20,34 0,30 C -14,28 -44,8 -36,-6 C -28,-26 -8,-14 0,-10Z"
+                fill="url(#petalGrad)" filter="url(#petalShadow)"></path>
+
+          <!-- middle petals (layer 2) -->
+          <path id="p3" class="petal" d="M0,-14 C 18,-36 48,-36 62,-10 C 68,6 36,48 0,44 C -30,40 -70,12 -56,-6 C -40,-30 -10,-18 0,-14Z"
+                fill="url(#petalGrad)" filter="url(#petalShadow)"></path>
+          <path id="p4" class="petal" d="M0,-14 C -18,-36 -48,-36 -62,-10 C -68,6 -36,48 0,44 C 30,40 70,12 56,-6 C 40,-30 10,-18 0,-14Z"
+                fill="url(#petalGrad)" filter="url(#petalShadow)"></path>
+
+          <!-- outer larger petals (layer 3) -->
+          <path id="p5" class="petal" d="M0,-20 C 30,-56 84,-56 108,-12 C 116,8 72,84 0,76 C -56,70 -140,20 -96,-10 C -64,-34 -16,-20 0,-20Z"
+                fill="url(#petalGrad)" filter="url(#petalShadow)"></path>
+          <path id="p6" class="petal" d="M0,-20 C -30,-56 -84,-56 -108,-12 C -116,8 -72,84 0,76 C 56,70 140,20 96,-10 C 64,-34 16,-20 0,-20Z"
+                fill="url(#petalGrad)" filter="url(#petalShadow)"></path>
+
+          <!-- duplicate petals rotated around center for fullness -->
+          <g id="rotGroup">
+            <!-- clones with rotation, we'll replicate with JS for variety -->
+          </g>
+
+          <!-- bud / center -->
+          <circle class="bud" cx="0" cy="0" r="18" fill="url(#budGrad)" />
+          <!-- small inner swirl to look like rolled petals in center -->
+          <path class="swirl" d="M -6 -2 C -2 -6 2 -10 7 -6 C 10 -3 8 1 5 2 C 2 3 -1 3 -3 2 C -6 1 -7 1 -6 -2Z" fill="#fff6f7" opacity="0.95"/>
+        </g>
+
+      </svg>
     </div>
-</div>
 
-<h1 id="text">Selamat Hari Valentine 💖</h1>
-<p id="subtext">Sebuah bunga kecil untukmu ✨</p>
-
-<button id="btn">Klik Aku</button>
+    <div class="actions" role="region" aria-label="Aksi">
+      <button class="primary" id="bloomBtn">Beri Kejutan — Mekarkan</button>
+      <button class="tertiary" id="resetBtn">Reset</button>
+    </div>
+  </div>
 
 <script>
-const btn = document.getElementById("btn");
-const flower = document.getElementById("flower");
-const text = document.getElementById("text");
-const subtext = document.getElementById("subtext");
+/*
+  Script overview:
+  - Arrange petals around center programmatically (rotate & stagger)
+  - On click "bloom", add class .bloom to SVG and add .open to each petal with stagger delays
+  - Reset returns to kuncup (remove classes)
+  - Petals are made by cloning existing petal shapes to make a realistic layered flower
+*/
 
-btn.addEventListener("click", () => {
+(function(){
+  const svg = document.querySelector('svg.flower-svg');
+  const petalContainer = svg.querySelector('g.petals');
+  const basePetals = [
+    svg.getElementById('p1'),
+    svg.getElementById('p2'),
+    svg.getElementById('p3'),
+    svg.getElementById('p4'),
+    svg.getElementById('p5'),
+    svg.getElementById('p6')
+  ];
+  const rotGroup = svg.getElementById('rotGroup');
 
-    flower.classList.toggle("bloom");
+  // function to clone and rotate petals to make a full flower
+  function buildPetalField(){
+    // clear existing clones (if any)
+    while (rotGroup.firstChild) rotGroup.removeChild(rotGroup.firstChild);
 
-    if (flower.classList.contains("bloom")) {
-        text.innerText = "Untuk Kamu 🌸";
-        subtext.innerText = "Semoga harimu seindah senyummu ✨";
-        sparkleEffect();
-    } else {
-        text.innerText = "Selamat Hari Valentine 💖";
-        subtext.innerText = "Sebuah bunga kecil untukmu ✨";
+    // we'll create N clones in symmetrical arrangement with slight randomization
+    const layers = [
+      {count:6, scale:0.72, baseIndex:0, radius:12, rotOffset:0},
+      {count:8, scale:0.92, baseIndex:2, radius:20, rotOffset:8},
+      {count:10, scale:1.18, baseIndex:4, radius:30, rotOffset:4}
+    ];
+
+    let petalIndex = 0;
+    layers.forEach((layer, L) => {
+      for(let i=0;i<layer.count;i++){
+        const base = basePetals[layer.baseIndex + (i%2)]; // alternate base petal shapes
+        const clone = base.cloneNode(true);
+        const angle = (360 / layer.count) * i + layer.rotOffset + (Math.random()*6-3);
+        const sc = layer.scale * (1 + (Math.random()*0.08-0.04));
+        // set transform for this cloned petal: rotate + translate outward a bit + scale small when closed
+        clone.setAttribute('transform', `rotate(${angle}) translate(0, ${-layer.radius}) scale(${sc})`);
+        clone.style.opacity = 0;
+        clone.classList.add('petal'); // ensure class exists
+        // set a custom delay variable for staggered opening (var --d)
+        const delay = (L*0.14) + (i * 0.06) + Math.random()*0.06;
+        clone.style.setProperty('--d', `${delay}s`);
+        // initial small scale (kuncup)
+        clone.style.transformOrigin = '50% 60%';
+        rotGroup.appendChild(clone);
+        petalIndex++;
+      }
+    });
+  }
+
+  // create initial clones
+  buildPetalField();
+
+  // now find all petals (originals + clones)
+  function getAllPetals(){
+    return Array.from(svg.querySelectorAll('.petal'));
+  }
+
+  // open animation: add .bloom to svg, then add class 'open' to petals with slight extra JS timeout
+  const bloomBtn = document.getElementById('bloomBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  bloomBtn.addEventListener('click', () => {
+    if(svg.classList.contains('bloom')) return; // already bloomed
+    svg.classList.add('bloom');
+
+    // staggered activation: we set 'open' class after reading their --d custom property for syncing
+    const petals = getAllPetals();
+
+    petals.forEach((p) => {
+      const d = parseFloat(getComputedStyle(p).getPropertyValue('--d')) || (Math.random()*0.6);
+      // apply transform for opening: in CSS, .open will set scale(1)
+      // but since initial transforms are set on SVG path elements, we animate by toggling opacity and transform via CSS transitions
+      setTimeout(()=> {
+        // each petal 'open' here uses CSS transitions already declared
+        p.classList.add('open');
+        p.style.opacity = 1;
+        // also slightly 'unfold' by modifying transform attribute for a little outward move
+        // we'll read current transform and add small translateY outward by -6 to simulate opening
+        const current = p.getAttribute('transform') || '';
+        // append a tiny translate to make it look like petal moves outward
+        p.setAttribute('transform', current + ' translate(0,-6)');
+      }, Math.round(d*1000));
+    });
+
+    // center bud swirl delay
+    const swirl = svg.querySelector('.swirl');
+    swirl.style.setProperty('--sw-Delay', '0.8s');
+
+    // reveal leaves slightly later
+    const leaves = svg.querySelectorAll('.leaf');
+    leaves.forEach((l, i)=>{
+      l.style.setProperty('--d', `${0.9 + i*0.06}s`);
+    });
+
+    // spawn a few particles for vibe
+    spawnParticles(18);
+    // change headline text
+    document.getElementById('title').innerText = 'Untuk Kamu — Mekar untukmu 🌸';
+    document.getElementById('subtitle').innerText = 'Semoga harimu semanis kelopak ini ✨';
+  });
+
+  resetBtn.addEventListener('click', () => {
+    // remove bloom, remove open class, rebuild petals (to reset transforms)
+    svg.classList.remove('bloom');
+    const petals = getAllPetals();
+    petals.forEach(p=>{
+      p.classList.remove('open');
+      p.style.opacity = 0;
+      // remove extra translate by re-building petal field to restore original transforms
+    });
+    // small timeout then rebuild
+    setTimeout(()=>{
+      buildPetalField();
+    }, 420);
+
+    document.getElementById('title').innerText = 'Selamat Hari Valentine 🌹';
+    document.getElementById('subtitle').innerText = 'Klik tombol untuk melihat kuncup mekar jadi bunga nyata — lembut dan natural.';
+  });
+
+  // particle generator for dreamy vibe
+  function spawnParticles(n=12){
+    for(let i=0;i<n;i++){
+      const span = document.createElement('div');
+      span.className = 'particle';
+      span.innerText = ['✨','❤','✦'][Math.floor(Math.random()*3)];
+      // random start near flower area (center of card)
+      const rect = document.querySelector('.card').getBoundingClientRect();
+      const x = rect.left + rect.width*0.5 + (Math.random()*120-60);
+      const y = rect.top + rect.height*0.4 + (Math.random()*40-20);
+      span.style.left = `${x}px`;
+      span.style.top = `${y}px`;
+      const size = Math.random()*10 + 10;
+      span.style.fontSize = `${size}px`;
+      document.body.appendChild(span);
+
+      // animate using CSS transform via requestAnimationFrame + transition
+      span.style.transition = `transform ${2.2 + Math.random()*1.2}s cubic-bezier(.2,.9,.25,1), opacity ${1.8 + Math.random()*1.2}s ease`;
+      // move upward and sideways a little
+      setTimeout(()=> {
+        const dx = (Math.random()*120-60);
+        const dy = -(150 + Math.random()*160);
+        span.style.transform = `translate(${dx}px, ${dy}px) rotate(${Math.random()*480-240}deg)`;
+        span.style.opacity = 0;
+      }, 30);
+
+      // cleanup
+      setTimeout(()=> span.remove(), 3000 + Math.random()*800);
     }
-});
+  }
 
-function sparkleEffect() {
-    for (let i = 0; i < 25; i++) {
-        const s = document.createElement("div");
-        s.classList.add("sparkle");
-        s.innerText = "✨";
+  // accessibility: trigger bloom via Enter on button
+  bloomBtn.addEventListener('keyup', (e)=>{
+    if(e.key === 'Enter') bloomBtn.click();
+  });
 
-        s.style.left = Math.random() * window.innerWidth + "px";
-        s.style.top = window.innerHeight + "px";
-        s.style.animationDuration = (Math.random() * 2 + 2) + "s";
-        s.style.fontSize = (Math.random() * 10 + 15) + "px";
-
-        document.body.appendChild(s);
-
-        setTimeout(() => s.remove(), 4000);
-    }
-}
+})();
 </script>
-
 </body>
 </html>
