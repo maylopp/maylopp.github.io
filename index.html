@@ -2,221 +2,226 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <title>Happy Valentine 💖</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Valentine</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
     <style>
-        /* --- CSS ESTETIKA --- */
-        body, html {
+        * {
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            /* Background gradasi pink lembut */
-            background: radial-gradient(ellipse at center, #ffe3e8 0%, #ffc2d1 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            box-sizing: border-box;
         }
 
-        /* Layar Pembuka (Overlay) */
-        #overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #e91e63;
-            z-index: 100;
+        body {
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: white;
-            transition: opacity 0.8s ease-out;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        #overlay h2 { font-weight: 300; margin-bottom: 20px; }
-
-        #overlay button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            background: white;
-            color: #e91e63;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
-            transition: transform 0.2s;
-            font-family: 'Poppins', sans-serif;
-            font-weight: bold;
-        }
-
-        #overlay button:hover { transform: scale(1.05); background: #fff0f5; }
-
-        /* Kontainer Utama */
-        .container {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            overflow: hidden;
             text-align: center;
-            display: none; /* Disembunyikan dulu */
-            position: relative;
-            z-index: 10;
         }
 
-        /* --- PERBAIKAN BUNGA UTAMA (MENGGUNAKAN SVG) --- */
-        .rose-container {
-            width: 280px;
-            height: auto;
-            margin: 0 auto 30px auto;
-            filter: drop-shadow(0 10px 15px rgba(194, 24, 91, 0.3));
+        h1 {
+            margin-top: 30px;
+            color: white;
+            font-size: 2.2em;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Animasi untuk bagian-bagian SVG */
-        .svg-stem { opacity: 0; animation: fadeInStem 2s ease-out forwards 0.5s; }
-        .svg-petal-back { opacity: 0; transform-origin: center 70%; animation: bloomLayer 2.5s ease-out forwards 1s; }
-        .svg-petal-mid { opacity: 0; transform-origin: center 70%; animation: bloomLayer 2.5s ease-out forwards 1.5s; }
-        .svg-petal-front { opacity: 0; transform-origin: center 70%; animation: bloomLayer 2.5s ease-out forwards 2s; }
-        .svg-center { opacity: 0; transform-origin: center 70%; animation: bloomLayer 2.5s ease-out forwards 2.5s; }
-
-        @keyframes bloomLayer {
-            0% { opacity: 0; transform: scale(0.7) rotate(-5deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-        @keyframes fadeInStem { to { opacity: 1; } }
-
-
-        /* --- PERBAIKAN KELOPAK JATUH --- */
-        .falling-petal {
-            position: fixed;
-            top: -50px;
-            z-index: 5;
-            /* Bentuk kelopak yang lebih realistis menggunakan border-radius kompleks */
-            width: 30px;
-            height: 40px;
-            background: linear-gradient(135deg, #ff9a9e 0%, #f6416c 100%);
-            border-radius: 10% 50% 50% 50% / 10% 50% 50% 50%;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        p {
+            color: white;
             opacity: 0.9;
-            pointer-events: none;
-            /* Animasi jatuh dan berputar */
-            animation: falling linear infinite;
+            margin-top: 10px;
         }
 
-        @keyframes falling {
-            0% { transform: translate(0, 0) rotate(0deg) scaleX(1); }
-            50% { transform: translate(50px, 50vh) rotate(180deg) scaleX(0.8); }
-            100% { transform: translate(-50px, 105vh) rotate(360deg) scaleX(1); }
+        /* BUNGA */
+        .flower {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin-bottom: 20px;
         }
 
-
-        /* --- PESAN TEKS --- */
-        .message-box {
-            font-family: 'Dancing Script', cursive;
-            color: #c2185b;
-            font-size: 2rem;
-            opacity: 0;
-            animation: slideUpFade 2s ease-out forwards 4.5s; /* Muncul setelah bunga selesai mekar */
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        .heart {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: #ff4d6d;
+            transform: rotate(-45deg);
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
 
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -35px; }
+        .heart::after { left: 35px; }
+
+        .center {
+            top: 75px;
+            left: 75px;
+            background: #d6336c;
+            z-index: 2;
+        }
+
+        .petal1 { top: 0; left: 75px; }
+        .petal2 { top: 35px; left: 145px; }
+        .petal3 { top: 110px; left: 160px; }
+        .petal4 { top: 160px; left: 75px; }
+        .petal5 { top: 110px; left: -10px; }
+        .petal6 { top: 35px; left: -10px; }
+
+        /* Batang */
+        .stem {
+            position: absolute;
+            width: 8px;
+            height: 120px;
+            background: #2b9348;
+            top: 130px;
+            left: 105px;
+            border-radius: 10px;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 35px;
+            height: 20px;
+            background: #55a630;
+            border-radius: 50%;
+        }
+
+        .leaf1 {
+            top: 170px;
+            left: 110px;
+            transform: rotate(30deg);
+        }
+
+        .leaf2 {
+            top: 190px;
+            left: 70px;
+            transform: rotate(-30deg);
+        }
+
+        /* Animasi */
+        @keyframes heartbeat {
+            0% { transform: scale(1) rotate(-45deg); }
+            50% { transform: scale(1.15) rotate(-45deg); }
+            100% { transform: scale(1) rotate(-45deg); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(-45deg); }
+            50% { transform: translateY(-10px) rotate(-45deg); }
+            100% { transform: translateY(0) rotate(-45deg); }
+        }
+
+        .bloom .heart {
+            animation: heartbeat 0.8s infinite;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 30px;
+            background: white;
+            color: #d6336c;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Efek hati jatuh */
+        .falling-heart {
+            position: absolute;
+            color: rgba(255,255,255,0.8);
+            font-size: 20px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <div id="overlay">
-        <h2>Hai, ada pesan untukmu.</h2>
-        <button onclick="openValentine()">Buka Sekarang ❤️</button>
+    <div class="flower" id="flower">
+        <div class="heart center"></div>
+        <div class="heart petal1"></div>
+        <div class="heart petal2"></div>
+        <div class="heart petal3"></div>
+        <div class="heart petal4"></div>
+        <div class="heart petal5"></div>
+        <div class="heart petal6"></div>
+
+        <div class="stem"></div>
+        <div class="leaf leaf1"></div>
+        <div class="leaf leaf2"></div>
     </div>
 
-    <div class="container" id="mainContent">
-        <div class="rose-container">
-             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500" xml:space="preserve">
-                <g class="svg-stem">
-                    <path fill="#4CAF50" d="M245.6,488.8c-2.3,0-4.5-1.1-5.8-3c-2-2.8-1.3-6.7,1.5-8.7l0.6-0.4c17.9-12.9,29.9-34.4,31.5-58.3 c1.3-20.3-3.9-40.1-14.6-56.7l-0.6-1c-1.8-2.9-0.9-6.7,2-8.5c2.9-1.8,6.7-0.9,8.5,2l0.6,1c12.5,19.5,18.7,42.7,17.1,66.5 c-1.8,28.2-16,53.5-37,68.6l-0.6,0.4C247.9,488.4,246.8,488.8,245.6,488.8z"/>
-                    <path fill="#388E3C" d="M288.4,393c-12.1-22.6-40.1-31.1-62.7-18.9c-22.6,12.1-31.1,40.1-18.9,62.7c12.1,22.6,40.1,31.1,62.7,18.9 C292.1,443.6,300.5,415.6,288.4,393z M269.9,438.5c-11.4,6.1-25.5,1.8-31.6-9.6c-6.1-11.4-1.8-25.5,9.6-31.6s25.5-1.8,31.6,9.6 C285.6,418.3,281.3,432.4,269.9,438.5z"/>
-                    <path fill="#388E3C" d="M200.4,343c12.1-22.6,40.1-31.1,62.7-18.9c22.6,12.1,31.1,40.1,18.9,62.7c-12.1,22.6-40.1,31.1-62.7,18.9 C196.7,393.6,188.3,365.6,200.4,343z M218.9,388.5c11.4,6.1,25.5,1.8,31.6-9.6c6.1-11.4,1.8-25.5-9.6-31.6s-25.5-1.8-31.6,9.6 C203.2,368.3,207.5,382.4,218.9,388.5z"/>
-                </g>
-                <g class="svg-petal-back">
-                    <path fill="#D81B60" d="M250,130.9c44.1,0,83,22.1,107.2,56.5c-20.7,49.5-69.6,84.3-126.9,84.3s-106.2-34.7-126.9-84.3 C167,153,205.9,130.9,250,130.9z"/>
-                </g>
-                <g class="svg-petal-mid">
-                    <path fill="#E91E63" d="M250,157.9c36.3,0,68.5,18.2,88.5,46.6c-17.1,40.8-57.4,69.5-104.7,69.5c-47.3,0-87.6-28.7-104.7-69.5 C181.5,176.1,213.7,157.9,250,157.9z"/>
-                </g>
-                <g class="svg-petal-front">
-                    <path fill="#F06292" d="M250,189c26.8,0,50.7,13.5,65.5,34.5c-12.7,30.2-42.5,51.5-77.5,51.5c-35,0-64.8-21.3-77.5-51.5 C199.3,202.5,223.2,189,250,189z"/>
-                </g>
-                <g class="svg-center">
-                    <path fill="#F48FB1" d="M250,220c17.6,0,33.3,8.8,43,22.7c-8.3,19.8-27.9,33.8-50.9,33.8s-42.6-14-50.9-33.8 C216.7,228.8,232.4,220,250,220z"/>
-                    <ellipse fill="#F8BBD0" cx="250" cy="265" rx="25" ry="12"/>
-                </g>
-            </svg>
-        </div>
+    <h1 id="text">Selamat Hari Valentine 💖</h1>
+    <p id="subtext">Sebuah bunga kecil untukmu ✨</p>
 
-        <div class="message-box">
-            Selamat Hari Valentine,<br>
-            Semoga harimu seindah bunga ini.<br>
-            ✨🌹✨
-        </div>
-    </div>
-
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" type="audio/mpeg">
-    </audio>
+    <button id="btn">Klik Aku</button>
 
     <script>
-        function openValentine() {
-            // 1. Hilangkan Overlay
-            const overlay = document.getElementById('overlay');
-            overlay.style.opacity = '0';
-            
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                // 2. Tampilkan konten utama
-                document.getElementById('mainContent').style.display = 'block';
-                // 3. Putar musik
-                document.getElementById('bgMusic').play().catch(error => {
-                    console.log("Autoplay dicegah oleh browser, tidak apa-apa.");
-                });
-                // 4. Mulai hujan kelopak
-                startFallingPetals();
-            }, 800);
-        }
+        const btn = document.getElementById("btn");
+        const flower = document.getElementById("flower");
+        const text = document.getElementById("text");
+        const subtext = document.getElementById("subtext");
 
-        function startFallingPetals() {
-            const petalCount = 40; // Jumlah kelopak
-            for (let i = 0; i < petalCount; i++) {
-                createPetal();
+        btn.addEventListener("click", () => {
+
+            flower.classList.toggle("bloom");
+
+            if (text.innerText.includes("Valentine")) {
+                text.innerText = "Untuk Kamu 🌹";
+                subtext.innerText = "Semoga harimu seindah senyummu ✨";
+                createHearts();
+            } else {
+                text.innerText = "Selamat Hari Valentine 💖";
+                subtext.innerText = "Sebuah bunga kecil untukmu ✨";
+            }
+        });
+
+        function createHearts() {
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement("div");
+                heart.classList.add("falling-heart");
+                heart.innerText = "💖";
+
+                heart.style.left = Math.random() * window.innerWidth + "px";
+                heart.style.top = "-20px";
+                heart.style.animationDuration = (Math.random() * 2 + 2) + "s";
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 4000);
             }
         }
-
-        function createPetal() {
-            const petal = document.createElement('div');
-            petal.className = 'falling-petal';
-            
-            // Acak posisi awal (kiri/kanan layar)
-            petal.style.left = Math.random() * 100 + 'vw';
-            
-            // Acak ukuran kelopak agar variatif
-            const sizeModifier = Math.random() * 0.5 + 0.7; // Skala antara 0.7 sampai 1.2
-            petal.style.transform = `scale(${sizeModifier})`;
-
-            // Acak durasi dan delay animasi jatuh
-            const duration = Math.random() * 5 + 6 + 's'; // Antara 6-11 detik
-            const delay = Math.random() * 5 + 's'; // Delay 0-5 detik di awal
-            
-            petal.style.animationDuration = duration;
-            petal.style.animationDelay = delay;
-
-            document.body.appendChild(petal);
-
-            // Hapus kelopak setelah selesai animasi agar tidak memberatkan browser
-            setTimeout(() => {
-                petal.remove();
-                createPetal(); // Buat kelopak baru untuk menggantikannya (looping)
-            }, parseFloat(duration) * 1000 + parseFloat(delay) * 1000);
-        }
     </script>
+
 </body>
 </html>
