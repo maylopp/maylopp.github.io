@@ -1,36 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Font Poppins -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;1,400&display=swap" rel="stylesheet">
-  <!-- Style CSS -->
-  <link rel="stylesheet" href="./styles/style.css">
-  <title>Halaman Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special for You</title>
+    <style>
+        /* CSS Utama */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: radial-gradient(circle, #fff0f3 0%, #ffccd5 100%);
+            font-family: 'Georgia', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Tombol Start Overlay */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #ff4d6d;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            transition: opacity 1s ease;
+        }
+
+        #overlay button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: white;
+            color: #ff4d6d;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        /* Kontainer Utama */
+        .container {
+            text-align: center;
+            display: none; /* Sembunyi sampai tombol diklik */
+        }
+
+        /* Bunga Rose */
+        .flower {
+            position: relative;
+            width: 200px;
+            height: 250px;
+            margin: 0 auto;
+        }
+
+        .rose-petals > div {
+            position: absolute;
+            bottom: 60%;
+            left: 50%;
+            transform-origin: bottom center;
+            border-radius: 50% 50% 10% 10%;
+            background: linear-gradient(to top, #ff4d6d, #ff758f);
+            animation: bloom 3s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        /* Pengaturan Kelopak */
+        .rose-petals div:nth-child(1) { width: 45px; height: 75px; margin-left: -22px; animation-delay: 0.5s; }
+        .rose-petals div:nth-child(2) { width: 55px; height: 85px; margin-left: -27px; transform: rotate(40deg); animation-delay: 0.8s; }
+        .rose-petals div:nth-child(3) { width: 55px; height: 85px; margin-left: -27px; transform: rotate(-40deg); animation-delay: 1.1s; }
+        .rose-petals div:nth-child(4) { width: 65px; height: 95px; margin-left: -32px; transform: rotate(80deg); animation-delay: 1.4s; }
+        .rose-petals div:nth-child(5) { width: 65px; height: 95px; margin-left: -32px; transform: rotate(-80deg); animation-delay: 1.7s; }
+        
+        .stem {
+            width: 8px;
+            height: 180px;
+            background: linear-gradient(to bottom, #2d6a4f, #1b4332);
+            position: absolute;
+            top: 40%; left: 50%; margin-left: -4px;
+            z-index: -1;
+        }
+
+        .leaf {
+            width: 35px; height: 55px;
+            background: #40916c;
+            border-radius: 50% 0 50% 0;
+            position: absolute;
+            top: 60px; left: 5px; transform: rotate(-20deg);
+        }
+
+        @keyframes bloom {
+            0% { transform: scale(0) translateY(20px); opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Efek Kelopak Gugur */
+        .falling-petal {
+            position: fixed;
+            top: -10%;
+            background: #ff758f;
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(540deg);
+            }
+        }
+
+        /* Pesan Teks */
+        .message {
+            margin-top: 20px;
+            color: #c9184a;
+            font-size: 1.4rem;
+            font-weight: bold;
+            opacity: 0;
+            animation: fadeIn 3s forwards;
+            animation-delay: 4s;
+            line-height: 1.5;
+            padding: 0 20px;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="login_container">
-    <h2>Hi👋🏼 Ayangg login dulu yuk</h2>
-    <form id="loginForm" class="login_form">
-      <input type="text" id="username" placeholder="Username" />
-      <input type="password" id="password" placeholder="Password" />
-      <button type="submit" id="loginBtn">Login</button>
-    </form>
-    <p class="login_description">
-      pssstttt, usernamenya isi "iankaseppisan" dan passwordnya sama dengan usernamenya ya
-    </p>
-  </div>
-</body>
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
-<!-- SweetAlery -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Main JS -->
-<script type="application/javascript" src="./scripts/index.js"></script>
 
+    <div id="overlay">
+        <h2>Ada sesuatu untukmu...</h2>
+        <button onclick="startValentine()">Buka Pesan ❤️</button>
+    </div>
+
+    <div class="container" id="mainContent">
+        <div class="flower">
+            <div class="rose-petals">
+                <div></div><div></div><div></div><div></div><div></div>
+            </div>
+            <div class="stem">
+                <div class="leaf"></div>
+            </div>
+        </div>
+
+        <div class="message">
+            "Bunga ini mungkin digital,<br>
+            tapi tulusnya beneran.<br>
+            Happy Valentine's Day!"
+            <br>✨🌹✨
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function startValentine() {
+            // Sembunyikan Overlay
+            document.getElementById('overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                // Putar Musik
+                document.getElementById('bgMusic').play();
+                // Mulai Hujan Kelopak
+                createFallingPetals();
+            }, 1000);
+        }
+
+        function createFallingPetals() {
+            const petalCount = 30;
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'falling-petal';
+                
+                // Randomize posisi dan kecepatan
+                const size = Math.random() * 15 + 10 + 'px';
+                petal.style.width = size;
+                petal.style.height = size;
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationDuration = Math.random() * 3 + 4 + 's';
+                petal.style.animationDelay = Math.random() * 5 + 's';
+                petal.style.opacity = Math.random();
+                
+                document.body.appendChild(petal);
+            }
+        }
+    </script>
+</body>
 </html>
